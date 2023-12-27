@@ -1,6 +1,7 @@
 import express from 'express';
 import { LoginAdminController } from './controllers/LoginAdminController';
 import session from 'express-session';
+import { LogoutAdminController } from './controllers/LogoutAdminController';
 
 declare module 'express-session' {
   interface SessionData {
@@ -10,6 +11,7 @@ declare module 'express-session' {
 
 interface ServerControllers {
   loginAdminController: LoginAdminController;
+  logoutAdminController: LogoutAdminController;
 }
 
 export class Server {
@@ -26,7 +28,10 @@ export class Server {
         secret: process.env.SESSION_SECRET as string,
         resave: false,
         saveUninitialized: true,
-        cookie: { secure: false },
+        cookie: {
+          secure: false,
+          maxAge: 900000,
+        },
       }),
     );
 
@@ -34,6 +39,10 @@ export class Server {
 
     app.post('/login', (req, res) =>
       controllers.loginAdminController.handle(req, res),
+    );
+
+    app.post('/logout', (req, res) =>
+      controllers.logoutAdminController.handle(req, res),
     );
 
     app.listen(port, () => {
