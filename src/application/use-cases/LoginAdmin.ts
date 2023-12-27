@@ -12,21 +12,33 @@ export interface ILoginAdminResult {
 }
 
 export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
-  public constructor(private readonly _userRepo: IAdminRepository) {}
+  public constructor(private readonly _adminRepo: IAdminRepository) {}
 
   public async execute(
     input: ILoginAdminDTO,
   ): Promise<ILoginAdminResult | Error> {
-    const admin = await this._userRepo.login(input.email);
+    const admin = await this._adminRepo.findAdminByEmail(input.email);
 
     if (!admin) {
-      return new Error('Admin don\'t exist');
+      return new Error("Admin don't exist");
     }
 
-    const passwordMatch = await bcrypt.compare(input.password, admin.password);
+    try {
 
-    if (!passwordMatch) {
-      return new Error('Invalid password');
+      const passwordMatch = await bcrypt.compare(
+        input.password,
+        admin.password,
+      );
+
+      if (!passwordMatch) {
+        return new Error('Invalid password');
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        return error;
+      }
+
+      return new Error('Password comparison failed');
     }
 
     return {

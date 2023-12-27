@@ -23,21 +23,21 @@ export class Server {
 
     app.use(
       session({
-        secret: 'your-secret-key',
+        secret: process.env.SESSION_SECRET as string,
         resave: false,
         saveUninitialized: true,
         cookie: { secure: false },
       }),
     );
 
-    app.get('/admin', (req, res) => res.send('Admin server is running'));
+    app.get('/', (req, res) => res.send('Admin server is running'));
 
     app.post('/login', (req, res) =>
       controllers.loginAdminController.handle(req, res),
     );
 
     app.listen(port, () => {
-      console.log(`Server is running in ${port}`);
+      console.log(`Admin server is running in ${port}`);
     });
   }
 }

@@ -13,8 +13,6 @@ export class LoginAdminDTO implements ILoginAdminResult {
   }
 }
 
-
-
 export class LoginAdminController implements IController {
   public constructor(private readonly _useCase: LoginAdmin) {}
 
@@ -25,6 +23,7 @@ export class LoginAdminController implements IController {
     });
 
     if (result instanceof Error) {
+      console.error(result);
       res.status(400).json({ error: 'Something went wrong' });
       return;
     }
