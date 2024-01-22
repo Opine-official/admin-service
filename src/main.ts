@@ -1,7 +1,7 @@
 import { LoginAdmin } from './application/use-cases/LoginAdmin';
 import { DatabaseConnection } from './infrastructure/database/Connection';
 import { AdminRepository } from './infrastructure/repositories/AdminRepository';
-import { Server } from './presentation/Server';
+import { Server } from './infrastructure/Server';
 import { LoginAdminController } from './presentation/controllers/LoginAdminController';
 import { LogoutAdminController } from './presentation/controllers/LogoutAdminController';
 
@@ -14,7 +14,7 @@ export async function main() {
 
   await Server.run(5000, {
     loginAdminController,
-    logoutAdminController
+    logoutAdminController,
   });
 }
 

@@ -1,7 +1,8 @@
 import express from 'express';
-import { LoginAdminController } from './controllers/LoginAdminController';
+import cors from 'cors';
+import { LoginAdminController } from '../presentation/controllers/LoginAdminController';
 import session from 'express-session';
-import { LogoutAdminController } from './controllers/LogoutAdminController';
+import { LogoutAdminController } from '../presentation/controllers/LogoutAdminController';
 
 declare module 'express-session' {
   interface SessionData {
@@ -14,6 +15,12 @@ interface ServerControllers {
   logoutAdminController: LogoutAdminController;
 }
 
+const corsOptions = {
+  origin: 'https://localhost:3000',
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
 export class Server {
   public static async run(
     port: number,
@@ -22,6 +29,8 @@ export class Server {
     const app = express();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(cors(corsOptions));
+    app.options('*', cors(corsOptions));
 
     app.use(
       session({
