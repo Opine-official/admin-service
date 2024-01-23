@@ -17,4 +17,19 @@ export class AdminRepository implements IAdminRepository {
       adminDocument.password,
     );
   }
+
+  public async findAdminById(adminId: string): Promise<Admin | null> {
+    const adminDocument = await AdminModel.findOne({ adminId: adminId });
+
+    if (!adminDocument) {
+      return null;
+    }
+
+    return new Admin(
+      adminDocument.adminId,
+      adminDocument.name,
+      adminDocument.email,
+      adminDocument.password,
+    );
+  }
 }
