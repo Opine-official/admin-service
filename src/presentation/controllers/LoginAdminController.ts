@@ -7,9 +7,11 @@ import {
 
 export class LoginAdminDTO implements ILoginAdminResult {
   public readonly adminId: string;
+  public readonly token: string;
 
-  public constructor(id: string) {
+  public constructor(id: string, token: string) {
     this.adminId = id;
+    this.token = token;
   }
 }
 
@@ -28,12 +30,18 @@ export class LoginAdminController implements IController {
       return;
     }
 
-    req.session.adminId = result.adminId;
-
     const response: ILoginAdminResult = {
       adminId: result.adminId,
+      token: result.token,
     };
 
-    res.status(200).json(response);
+    res
+      .cookie('adminToken', result.token, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+      })
+      .status(200)
+      .json(response);
   }
 }

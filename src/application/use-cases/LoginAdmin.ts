@@ -1,6 +1,7 @@
 import { IAdminRepository } from '../interfaces/IAdminRepository';
 import { IUseCase } from '../../shared/interfaces/IUseCase';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 interface ILoginAdminDTO {
   email: string;
@@ -9,6 +10,7 @@ interface ILoginAdminDTO {
 
 export interface ILoginAdminResult {
   adminId: string;
+  token: string;
 }
 
 export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
@@ -24,15 +26,29 @@ export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
     }
 
     try {
-
       const passwordMatch = await bcrypt.compare(
         input.password,
         admin.password,
       );
 
       if (!passwordMatch) {
-        return new Error('Invalid password');
+        throw new Error('Invalid password');
       }
+
+      const SECRET = process.env.JWT_SECRET;
+
+      if (!SECRET) {
+        throw new Error('Missing JWT secret');
+      }
+
+      const token = jwt.sign({ userId: admin.adminId }, SECRET, {
+        expiresIn: '24h',
+      });
+
+      return {
+        adminId: admin.adminId,
+        token,
+      };
     } catch (error: unknown) {
       if (error instanceof Error) {
         return error;
@@ -40,9 +56,5 @@ export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
 
       return new Error('Password comparison failed');
     }
-
-    return {
-      adminId: admin.adminId,
-    };
   }
 }

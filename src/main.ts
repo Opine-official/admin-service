@@ -1,5 +1,5 @@
 import { LoginAdmin } from './application/use-cases/LoginAdmin';
-import { VerifyAdmin } from './application/use-cases/VerifyAdmin';
+// import { VerifyAdmin } from './application/use-cases/VerifyAdmin';
 import { DatabaseConnection } from './infrastructure/database/Connection';
 import { AdminRepository } from './infrastructure/repositories/AdminRepository';
 import { Server } from './infrastructure/Server';
@@ -11,7 +11,7 @@ export async function main() {
   const adminRepo = new AdminRepository();
 
   const loginAdmin = new LoginAdmin(adminRepo);
-  const verifyAdmin = new VerifyAdmin(adminRepo);
+  // const verifyAdmin = new VerifyAdmin(adminRepo);
 
   const loginAdminController = new LoginAdminController(loginAdmin);
   const logoutAdminController = new LogoutAdminController();
@@ -22,7 +22,7 @@ export async function main() {
       loginAdminController,
       logoutAdminController,
     },
-    verifyAdmin,
+    // verifyAdmin,
   );
 }
 
