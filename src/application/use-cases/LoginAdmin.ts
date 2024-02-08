@@ -35,7 +35,7 @@ export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
         throw new Error('Invalid password');
       }
 
-      const SECRET = process.env.JWT_SECRET;
+      const SECRET = process.env.ADMIN_JWT_SECRET;
 
       if (!SECRET) {
         throw new Error('Missing JWT secret');

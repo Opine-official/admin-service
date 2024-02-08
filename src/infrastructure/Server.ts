@@ -5,6 +5,7 @@ import { LogoutAdminController } from '../presentation/controllers/LogoutAdminCo
 // import { verifyAdminSession } from './middlewares/VerifyAdminSession';
 // import { VerifyAdmin } from '../application/use-cases/VerifyAdmin';
 import cookieParser from 'cookie-parser';
+import { authenticateAdmin } from '@opine-official/authentication';
 
 interface ServerControllers {
   loginAdminController: LoginAdminController;
@@ -38,9 +39,13 @@ export class Server {
       controllers.logoutAdminController.handle(req, res),
     );
 
+    app.get('/verify', authenticateAdmin, (req, res) => {
+      res.status(200).json('admin verified');
+    });
+
     // app.use(verifyAdminSession(verifyAdmin));
 
-    app.get('/');
+    // app.get('/');
 
     app.listen(port, () => {
       console.log(`Admin server is running in ${port}`);
