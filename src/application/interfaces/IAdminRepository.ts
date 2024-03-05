@@ -1,5 +1,6 @@
-import { Admin } from "../../domain/entities/Admin";
+import { Admin } from '../../domain/entities/Admin';
 
 export interface IAdminRepository {
-  login(email: string): Promise<Admin | null>;
+  findAdminByEmail(email: string): Promise<Admin | null>;
+  findAdminById(adminId: string): Promise<Admin | null>;
 }

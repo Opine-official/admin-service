@@ -23,6 +23,6 @@ COPY package*.json ./
 
 RUN pnpm install --production
 
-EXPOSE 3001
+EXPOSE 5000
 
 CMD [ "node", "dist/main.js" ]
