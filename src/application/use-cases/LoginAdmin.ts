@@ -41,7 +41,7 @@ export class LoginAdmin implements IUseCase<ILoginAdminDTO, ILoginAdminResult> {
         throw new Error('Missing JWT secret');
       }
 
-      const token = jwt.sign({ userId: admin.adminId }, SECRET, {
+      const token = jwt.sign({ userId: admin.adminId, role: 'admin' }, SECRET, {
         expiresIn: '24h',
       });
 
